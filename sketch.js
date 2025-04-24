@@ -8,8 +8,8 @@ let synth, slider, label, playBtn, geomSel;
 
 // Initialize UI elements after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Tone.js synth
-  synth = new Tone.Synth().toDestination();
+  // We'll initialize the synth only when needed (on play button click)
+  // to avoid AudioContext errors
 
   // Get UI elements
   slider = document.getElementById('freqSlider');
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   slider.addEventListener('input', () => {
     freq = +slider.value;
     label.textContent = freq;
-    if (playing) synth.frequency.value = freq;
+    if (playing && synth) synth.frequency.value = freq;
     if (typeof window.redraw === 'function') {
       window.redraw();
     }
@@ -30,15 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
   playBtn.addEventListener('click', async () => {
     if (!playing) {
       try {
+        // Initialize synth only when needed (on first play)
+        if (!synth) {
+          synth = new Tone.Synth().toDestination();
+        }
+
+        // Start audio context with user interaction
         await Tone.start();
         synth.triggerAttack(freq);
         playing = true;
         playBtn.textContent = 'Stop';
       } catch (error) {
         console.error("Error starting audio:", error);
+        alert("Could not start audio. Please try again.");
       }
     } else {
-      synth.triggerRelease();
+      if (synth) {
+        synth.triggerRelease();
+      }
       playing = false;
       playBtn.textContent = 'Play';
     }
