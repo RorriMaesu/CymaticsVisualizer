@@ -1,17 +1,173 @@
 :root {
   color-scheme: dark;
-  --bg: #0c0c12;
+  --bg: #0a0a14;
+  --bg-gradient-start: #0a0a14;
+  --bg-gradient-end: #141428;
   --fg: #e0e3ff;
-  --accent: #0099ff;
+  --accent: #3a86ff;
+  --accent-hover: #4a96ff;
+  --accent-glow: rgba(58, 134, 255, 0.3);
+  --canvas-border: rgba(58, 134, 255, 0.4);
+  --input-bg: rgba(20, 20, 40, 0.6);
+  --input-border: rgba(58, 134, 255, 0.3);
+  --input-focus: rgba(58, 134, 255, 0.8);
 }
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
-body{background:var(--bg);color:var(--fg);display:flex;flex-direction:column;height:100vh}
-header{padding:1rem;text-align:center}
-#controls{margin-top:0.5rem;display:flex;flex-direction:column;gap:1rem;justify-content:center;align-items:center}
-.control-group{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:center}
-input[type=range]{width:200px}
-input[type=number]{width:80px;background:var(--bg);color:var(--fg);border:1px solid #444;border-radius:4px;padding:0.4rem;text-align:center}
-button,select{background:var(--accent);border:none;padding:0.4rem 0.8rem;color:#fff;border-radius:4px;cursor:pointer}
-main{flex:1;display:flex;justify-content:center;align-items:center}
-canvas{border:1px solid #333}
-footer{padding:0.5rem;text-align:center;font-size:0.7rem}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  color: var(--fg);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  line-height: 1.6;
+}
+
+header {
+  padding: 1.5rem 1rem 1rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px rgba(58, 134, 255, 0.5);
+}
+
+#controls {
+  margin: 0.8rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
+  padding: 0 1rem;
+}
+
+.control-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+input[type=range] {
+  width: 250px;
+  height: 6px;
+  -webkit-appearance: none;
+  background: var(--input-bg);
+  border-radius: 3px;
+  outline: none;
+  transition: background 0.2s;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--accent-glow);
+  transition: all 0.2s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+input[type=number] {
+  width: 100px;
+  background: var(--input-bg);
+  color: var(--fg);
+  border: 2px solid var(--input-border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+input[type=number]:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+label {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+button, select {
+  background: var(--accent);
+  border: none;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:hover, select:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+select {
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+#canvas-holder {
+  position: relative;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  border: 2px solid var(--canvas-border);
+  border-radius: 4px;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+footer {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}

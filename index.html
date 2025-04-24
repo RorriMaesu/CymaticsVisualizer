@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cymatics Visualizer</title>
   <link rel="stylesheet" href="style.css" />
   <!-- CDN libraries -->
@@ -13,12 +14,12 @@
     <h1>Cymatics Visualizer</h1>
     <div id="controls">
       <div class="control-group">
-        <label>Frequency (Hz):</label>
+        <label for="freqInput">Frequency (Hz):</label>
         <input type="number" id="freqInput" min="50" max="4000" value="440" step="1" />
         <input type="range" id="freqSlider" min="50" max="4000" value="440" step="1" />
       </div>
       <div class="control-group">
-        <button id="playBtn">Play / Stop</button>
+        <button id="playBtn">Play Sound</button>
         <select id="geomMode">
           <option value="square">Square Plate</option>
           <option value="circle">Circular Membrane</option>
