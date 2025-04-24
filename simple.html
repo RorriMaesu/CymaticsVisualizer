@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Cymatics Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #0a0a14;
+      color: white;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    canvas {
+      border: 2px solid rgba(58, 134, 255, 0.4);
+      border-radius: 4px;
+      box-shadow: 0 0 20px rgba(58, 134, 255, 0.3);
+    }
+    .controls {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    input, button {
+      padding: 8px;
+      border-radius: 4px;
+    }
+    input[type="number"] {
+      width: 100px;
+      background: rgba(20, 20, 40, 0.6);
+      color: white;
+      border: 2px solid rgba(58, 134, 255, 0.3);
+    }
+    button {
+      background: #3a86ff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simple Cymatics Test</h1>
+  
+  <div class="controls">
+    <label for="frequency">Frequency (Hz):</label>
+    <input type="number" id="frequency" min="50" max="4000" value="440" />
+    <button id="updateBtn">Update</button>
+  </div>
+  
+  <canvas id="canvas" width="400" height="400"></canvas>
+  
+  <script>
+    // Get elements
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const frequencyInput = document.getElementById('frequency');
+    const updateBtn = document.getElementById('updateBtn');
+    
+    // Initial frequency
+    let frequency = 440;
+    
+    // Draw cymatics pattern
+    function drawPattern() {
+      // Clear canvas
+      ctx.fillStyle = '#0a0a14';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Calculate mode numbers based on frequency
+      const n = Math.floor(Math.sqrt(frequency / 50));
+      const m = Math.floor(Math.sqrt(frequency / 50));
+      
+      // Draw pattern
+      const pixelSize = 2;
+      for (let y = 0; y < canvas.height; y += pixelSize) {
+        for (let x = 0; x < canvas.width; x += pixelSize) {
+          // Normalize coordinates
+          const nx = x / canvas.width;
+          const ny = y / canvas.height;
+          
+          // Calculate pattern value
+          const value = Math.sin(Math.PI * n * nx) * Math.sin(Math.PI * m * ny);
+          
+          // Map value to color
+          const intensity = Math.abs(value);
+          
+          if (intensity < 0.05) {
+            // Nodal lines (blue)
+            ctx.fillStyle = `rgb(58, 134, 255)`;
+          } else {
+            // Antinodal regions (white to blue gradient)
+            const r = Math.floor(lerp(58, 255, intensity));
+            const g = Math.floor(lerp(134, 255, intensity));
+            const b = 255;
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+          }
+          
+          ctx.fillRect(x, y, pixelSize, pixelSize);
+        }
+      }
+      
+      // Draw info text
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fillRect(10, 10, 200, 30);
+      ctx.fillStyle = 'white';
+      ctx.font = '14px Segoe UI, sans-serif';
+      ctx.fillText(`Frequency: ${frequency} Hz, Mode: (${n},${m})`, 20, 30);
+    }
+    
+    // Linear interpolation helper
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+    
+    // Update button click handler
+    updateBtn.addEventListener('click', () => {
+      frequency = parseInt(frequencyInput.value);
+      if (isNaN(frequency) || frequency < 50) frequency = 50;
+      if (frequency > 4000) frequency = 4000;
+      frequencyInput.value = frequency;
+      drawPattern();
+    });
+    
+    // Initial draw
+    drawPattern();
+  </script>
+</body>
+</html>
