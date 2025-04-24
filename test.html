@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P5.js Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <style>
+    body { margin: 0; padding: 20px; background: #111; color: white; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <h1>P5.js Test</h1>
+  <div id="canvas-container"></div>
+  
+  <script>
+    function setup() {
+      const canvas = createCanvas(400, 400);
+      canvas.parent('canvas-container');
+      background(0);
+    }
+    
+    function draw() {
+      background(0);
+      fill(255);
+      ellipse(width/2, height/2, 100, 100);
+      
+      // Display text
+      fill(255);
+      textSize(20);
+      textAlign(CENTER);
+      text("P5.js is working!", width/2, height/2 + 80);
+    }
+  </script>
+</body>
+</html>
