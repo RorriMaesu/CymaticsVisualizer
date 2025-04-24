@@ -1,0 +1,15 @@
+:root {
+  color-scheme: dark;
+  --bg: #0c0c12;
+  --fg: #e0e3ff;
+  --accent: #0099ff;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+body{background:var(--bg);color:var(--fg);display:flex;flex-direction:column;height:100vh}
+header{padding:1rem;text-align:center}
+#controls{margin-top:0.5rem;display:flex;gap:1rem;justify-content:center;align-items:center}
+input[type=range]{width:200px}
+button,select{background:var(--accent);border:none;padding:0.4rem 0.8rem;color:#fff;border-radius:4px;cursor:pointer}
+main{flex:1;display:flex;justify-content:center;align-items:center}
+canvas{border:1px solid #333}
+footer{padding:0.5rem;text-align:center;font-size:0.7rem}

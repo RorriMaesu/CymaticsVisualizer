@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cymatics Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- CDN libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Cymatics Visualizer</h1>
+    <div id="controls">
+      <label>Frequency (Hz):
+        <span id="freqLabel">440</span>
+      </label>
+      <input type="range" id="freqSlider" min="50" max="4000" value="440" step="1" />
+      <button id="playBtn">Play / Stop</button>
+      <select id="geomMode">
+        <option value="square">Square Plate</option>
+        <option value="circle">Circular Membrane</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <div id="canvas-holder"></div>
+  </main>
+
+  <footer>
+    <small>© 2025 Andrew J. Green — MIT License</small>
+  </footer>
+
+  <script src="sketch.js"></script>
+</body>
+</html>
