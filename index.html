@@ -12,15 +12,18 @@
   <header>
     <h1>Cymatics Visualizer</h1>
     <div id="controls">
-      <label>Frequency (Hz):
-        <span id="freqLabel">440</span>
-      </label>
-      <input type="range" id="freqSlider" min="50" max="4000" value="440" step="1" />
-      <button id="playBtn">Play / Stop</button>
-      <select id="geomMode">
-        <option value="square">Square Plate</option>
-        <option value="circle">Circular Membrane</option>
-      </select>
+      <div class="control-group">
+        <label>Frequency (Hz):</label>
+        <input type="number" id="freqInput" min="50" max="4000" value="440" step="1" />
+        <input type="range" id="freqSlider" min="50" max="4000" value="440" step="1" />
+      </div>
+      <div class="control-group">
+        <button id="playBtn">Play / Stop</button>
+        <select id="geomMode">
+          <option value="square">Square Plate</option>
+          <option value="circle">Circular Membrane</option>
+        </select>
+      </div>
     </div>
   </header>
 

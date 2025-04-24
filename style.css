@@ -7,8 +7,10 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
 body{background:var(--bg);color:var(--fg);display:flex;flex-direction:column;height:100vh}
 header{padding:1rem;text-align:center}
-#controls{margin-top:0.5rem;display:flex;gap:1rem;justify-content:center;align-items:center}
+#controls{margin-top:0.5rem;display:flex;flex-direction:column;gap:1rem;justify-content:center;align-items:center}
+.control-group{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:center}
 input[type=range]{width:200px}
+input[type=number]{width:80px;background:var(--bg);color:var(--fg);border:1px solid #444;border-radius:4px;padding:0.4rem;text-align:center}
 button,select{background:var(--accent);border:none;padding:0.4rem 0.8rem;color:#fff;border-radius:4px;cursor:pointer}
 main{flex:1;display:flex;justify-content:center;align-items:center}
 canvas{border:1px solid #333}
