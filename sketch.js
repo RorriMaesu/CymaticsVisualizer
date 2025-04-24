@@ -5,6 +5,7 @@ let freq = 440;
 let mode = 'square';
 let playing = false;
 let synth, slider, label, playBtn, geomSel;
+let startTime; // To track animation time
 
 // Initialize UI elements after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,9 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     freq = +slider.value;
     label.textContent = freq;
     if (playing && synth) synth.frequency.value = freq;
-    if (typeof window.redraw === 'function') {
-      window.redraw();
-    }
+    // Reset animation time for smooth transition
+    startTime = millis() / 1000;
   });
 
   playBtn.addEventListener('click', async () => {
@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
         synth.triggerAttack(freq);
         playing = true;
         playBtn.textContent = 'Stop';
+
+        // Reset animation time when starting playback
+        startTime = millis() / 1000;
       } catch (error) {
         console.error("Error starting audio:", error);
         alert("Could not start audio. Please try again.");
@@ -55,9 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   geomSel.addEventListener('change', () => {
     mode = geomSel.value;
-    if (typeof window.redraw === 'function') {
-      window.redraw();
-    }
+    // Reset animation time for smooth transition
+    startTime = millis() / 1000;
   });
 });
 
@@ -70,23 +72,29 @@ function setup() {
   canvas.parent('canvas-holder');
   pixelDensity(1);           // smoother colour bands
   pg = createGraphics(width, height);
-  noLoop();
+
+  // Use loop() for continuous animation
+  frameRate(30); // Set frame rate to 30 fps
+  loop();
+
+  // Initialize animation time
+  startTime = millis() / 1000;
 
   // Make redraw function available globally
   window.redraw = redraw;
-
-  // Initial draw
-  redraw();
 }
 
 function draw() {
+  // Calculate current time for animation
+  const currentTime = millis() / 1000 - startTime;
+
   pg.loadPixels();
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const value = mode === 'square'
-        ? squarePlatePattern(x / width, y / height)
-        : circularMembranePattern(x, y);
+        ? squarePlatePattern(x / width, y / height, currentTime)
+        : circularMembranePattern(x, y, currentTime);
 
       // Map value ∈ [-1,1] to colour
       const c = map(abs(value), 0, 1, 0, 255);
@@ -100,6 +108,12 @@ function draw() {
 
   pg.updatePixels();
   image(pg, 0, 0, width, height);
+
+  // Display current frequency
+  fill(255);
+  noStroke();
+  textAlign(LEFT, TOP);
+  text(`Frequency: ${freq} Hz`, 10, 10);
 }
 
 // Handle window resize
@@ -107,17 +121,22 @@ function windowResized() {
   const s = min(windowHeight * 0.75, windowWidth * 0.9);
   resizeCanvas(s, s);
   pg = createGraphics(width, height);
-  redraw();
+  // No need to call redraw() as we're using loop()
 }
 
 // -------- pattern functions --------
-function squarePlatePattern(x, y) {
+function squarePlatePattern(x, y, time) {
   const n = floor(sqrt(freq / 110)) + 1;
   const m = floor(sqrt(freq / 55)) + 1;
-  return sin(PI * n * x) * sin(PI * m * y);
+
+  // Add time component for animation (2πft)
+  const oscillation = cos(TWO_PI * freq * time);
+
+  // Standing wave pattern with time oscillation
+  return sin(PI * n * x) * sin(PI * m * y) * oscillation;
 }
 
-function circularMembranePattern(px, py) {
+function circularMembranePattern(px, py, time) {
   const r   = 0.5 * min(width, height);
   const cx  = width  / 2;
   const cy  = height / 2;
@@ -133,5 +152,10 @@ function circularMembranePattern(px, py) {
   // crude Bessel-J approx: J_n ≈ sin(k_n ρ) / (k_n ρ)
   const k = PI * m;
   const J = rho === 0 ? 1 : sin(k * rho) / (k * rho);
-  return cos(n * theta) * J;
+
+  // Add time component for animation (2πft)
+  const oscillation = cos(TWO_PI * freq * time);
+
+  // Standing wave pattern with time oscillation
+  return cos(n * theta) * J * oscillation;
 }
