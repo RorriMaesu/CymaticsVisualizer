@@ -1,6 +1,6 @@
 # Cymatics Visualizer
 
-An interactive web application that visualizes cymatics patterns - the geometric patterns that form on vibrating surfaces at different frequencies.
+An interactive web application that visualizes cymatics patterns - the geometric patterns that form on vibrating surfaces at different frequencies. The visualizer provides a beautiful and accurate representation of how sound waves create standing wave patterns.
 
 ## Features
 
